@@ -1,3 +1,67 @@
-opencode.jsonc
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-__pycache__
+# Virtual environments
+venv/
+env/
+ENV/
+rag-env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+
+# Data files (large files - regenerate these)
+data/processed_articles.json
+data/faiss_index/
+*.faiss
+*.json
+!config.json
+!package.json
+
+# Model files
+models/*.bin
+models/*.pt
+models/*.pth
+models/*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Opencode
+opencode.jsonc
