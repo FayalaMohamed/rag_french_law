@@ -1,7 +1,6 @@
 import os
 from typing import Optional, Any
 from langchain_ollama import ChatOllama
-from langchain_core.prompts import PromptTemplate
 from langchain_core.messages import HumanMessage, SystemMessage
 import config
 
@@ -55,7 +54,6 @@ class LLMChainWrapper:
         context: str,
         prompt: Optional[Any] = None,
     ) -> str:
-        """Generate final answer using a RAG prompt and provided context."""
         system_prompt = """Vous êtes un assistant juridique français expert. 
 Votre rôle est de répondre aux questions légales en utilisant UNIQUEMENT les informations 
 contenues dans les documents juridiques fournis.

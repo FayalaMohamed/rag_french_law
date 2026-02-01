@@ -24,7 +24,8 @@ def build_index(
     dataset_name: str = config.DATASET_NAME,
     output_index_path: str = config.FAISS_INDEX_PATH,
     processed_data_path: str = "data/processed_articles.json",
-    limit: int = None
+    limit: int = None,
+    index_type: str = "hnsw_flat"
 ):
     """
     Build the RAG index from the French legal dataset.
@@ -62,9 +63,11 @@ def build_index(
     embedding_model = EmbeddingModel(device=device)
     
     print("\n5. Creating vector store...")
+    print(f"   Using index type: {index_type}")
     vector_store = FAISSVectorStore(
         embedding_dim=embedding_model.embedding_dim,
-        index_path=output_index_path
+        index_path=output_index_path,
+        index_type=index_type
     )
     
     print("\n6. Embedding and indexing documents...")
@@ -171,6 +174,13 @@ if __name__ == "__main__":
         help="Limit number of articles for faster testing"
     )
     parser.add_argument(
+        "--index_type",
+        type=str,
+        default="hnsw_flat",
+        choices=["flat_l2", "ivf_flat", "ivf_pq", "hnsw_flat", "lsh"],
+        help="FAISS index type to use (default: hnsw_flat)"
+    )
+    parser.add_argument(
         "--test",
         action="store_true",
         help="Run test queries"
@@ -184,7 +194,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.build:
-        build_index(limit=args.limit)
+        build_index(limit=args.limit, index_type=args.index_type)
     elif args.test:
         pipeline = load_pipeline()
         test_pipeline(pipeline)
@@ -194,6 +204,10 @@ if __name__ == "__main__":
     else:
         print("French Legal RAG Pipeline")
         print("\nUsage:")
-        print("  python main.py --build    # Build the index from dataset")
-        print("  python main.py --test     # Run test queries")
-        print("  python main.py --interactive  # Interactive query mode")
+        print("  python main.py --build [--index_type TYPE]  # Build the index")
+        print("  python main.py --test                       # Run test queries")
+        print("  python main.py --interactive                # Interactive query mode")
+        print("\nIndex types: hnsw_flat (default), flat_l2, ivf_flat, ivf_pq, lsh")
+        print("\nExamples:")
+        print("  python main.py --build --index_type hnsw_flat --limit 1000")
+        print("  python main.py --build --index_type ivf_flat")
