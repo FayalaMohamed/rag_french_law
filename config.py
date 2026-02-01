@@ -6,7 +6,7 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
-EMBEDDING_MODEL_NAME = "dangvantuan/sentence-camembert-base"
+EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-small"
 
 FAISS_INDEX_PATH = "data/faiss_index"
 DATASET_NAME = "harvard-lil/cold-french-law"
