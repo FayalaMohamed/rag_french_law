@@ -5,9 +5,9 @@ Generates 8 test questions using Ollama and the indexed documents:
 - 5 in-context questions (grounded in indexed documents)
 - 3 out-of-context questions (NOT in indexed documents)
 
-Usage:
-    python generate_test_queries.py --output test_queries_generated.json
-    python generate_test_queries.py --num-in 5 --num-out 3 --sample-docs 20
+    Usage:
+    python benchmark/generate_test_queries.py --output benchmark_results/test_queries_generated.json
+    python benchmark/generate_test_queries.py --num-in 5 --num-out 3 --sample-docs 20
 
 Requirements:
     - FAISS index must be built (run main.py --build first)
@@ -431,8 +431,8 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="test_queries_generated.json",
-        help="Output file for generated queries (default: test_queries_generated.json)"
+        default="benchmark_results/test_queries_generated.json",
+        help="Output file for generated queries (default: benchmark_results/test_queries_generated.json)"
     )
     parser.add_argument(
         "--num-in",
@@ -549,7 +549,7 @@ def main():
     
     print("\n💡 Next steps:")
     print(f"   1. Review the generated questions in {args.output}")
-    print(f"   2. Run comparison: python compare_retrieval_strategies.py --run-comparison --queries-file {args.output}")
+    print(f"   2. Run comparison: python benchmark/compare_retrieval_strategies.py --run-comparison --queries-file {args.output}")
     print(f"   3. Or test manually: python main.py --interactive")
 
 

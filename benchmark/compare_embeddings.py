@@ -896,8 +896,8 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="comparison_report.json",
-        help="Output file for comparison report"
+        default="benchmark_results/comparison_report.json",
+        help="Output file for comparison report (default: benchmark_results/comparison_report.json)"
     )
     
     args = parser.parse_args()
@@ -910,7 +910,7 @@ def main():
         models_to_test = {k: v for k, v in TEST_MODELS.items() if k in args.models}
     
     # Load test queries
-    GENERATED_QUERIES_FILE = "test_queries_generated.json"
+    GENERATED_QUERIES_FILE = "benchmark_results/test_queries_generated.json"
     
     if args.queries_file and os.path.exists(args.queries_file):
         # User specified a custom queries file
@@ -964,7 +964,8 @@ def main():
         build_results = build_all_indexes(models_to_test, articles, args.index_type)
         
         # Save build results
-        with open("index_build_results.json", "w", encoding="utf-8") as f:
+        os.makedirs("benchmark_results", exist_ok=True)
+        with open("benchmark_results/index_build_results.json", "w", encoding="utf-8") as f:
             json.dump(build_results, f, ensure_ascii=False, indent=2)
         
         print("\n✓ Index building complete!")

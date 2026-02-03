@@ -940,8 +940,8 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="strategy_comparison_report.json",
-        help="Output file for comparison report"
+        default="benchmark_results/strategy_comparison_report.json",
+        help="Output file for comparison report (default: benchmark_results/strategy_comparison_report.json)"
     )
     parser.add_argument(
         "--llm-judge",
@@ -966,7 +966,7 @@ def main():
     load_dotenv()
     
     # Load test queries
-    GENERATED_QUERIES_FILE = "test_queries_generated.json"
+    GENERATED_QUERIES_FILE = "benchmark_results/test_queries_generated.json"
     
     if args.queries_file and os.path.exists(args.queries_file):
         # User specified a custom queries file

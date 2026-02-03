@@ -70,13 +70,13 @@ BENCHMARK_CONFIGS = [
 class TextProcessingBenchmark:
     """Benchmark for text processing configurations using real indexes."""
     
-    def __init__(self, dataset_limit: int = 1000, output_dir: str = "data/benchmark_indexes"):
+    def __init__(self, dataset_limit: int = 1000, output_dir: str = "benchmark_results"):
         """
         Initialize benchmark.
         
         Args:
             dataset_limit: Max number of articles to load (for faster testing)
-            output_dir: Directory to save benchmark indexes (default: data/benchmark_indexes)
+            output_dir: Directory to save benchmark indexes and results (default: benchmark_results)
         """
         self.evaluator = RAGEvaluator()
         self.dataset_limit = dataset_limit
@@ -606,8 +606,8 @@ def main():
     parser.add_argument(
         "--output",
         type=str,
-        default="benchmark_text_processing_results.json",
-        help="Path to save results (default: benchmark_text_processing_results.json)"
+        default="benchmark_results/benchmark_text_processing_results.json",
+        help="Path to save results (default: benchmark_results/benchmark_text_processing_results.json)"
     )
     parser.add_argument(
         "--configs",
@@ -625,8 +625,8 @@ def main():
     parser.add_argument(
         "--output-dir",
         type=str,
-        default="data/benchmark_indexes",
-        help="Directory to save benchmark indexes (default: data/benchmark_indexes)"
+        default="benchmark_results",
+        help="Directory to save benchmark indexes and results (default: benchmark_results)"
     )
     
     args = parser.parse_args()
