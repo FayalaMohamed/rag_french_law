@@ -38,3 +38,6 @@ dependencies:
     # Testing
     - pytest>=7.4.0
     - pytest-mock>=3.11.0
+
+    # Visualization
+    - matplotlib>=3.7.0

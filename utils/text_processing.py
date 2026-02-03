@@ -397,7 +397,7 @@ if __name__ == "__main__":
 
     Article L1234-2 du Code du travail
 
-    La durée de la période d'essai ne peut être indéfinie. Elle est ditentukan selon les dispositions suivantes.
+    La durée de la période d'essai ne peut être indéfinie. Elle est déterminée selon les dispositions suivantes.
     """
 
     print("Original text:")
