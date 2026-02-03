@@ -9,13 +9,6 @@ from .text_processing import (
     normalize_citation
 )
 
-from .citation_manager import (
-    CitationManager,
-    CitationTracker,
-    CitationType,
-    SourceDocument
-)
-
 from .evaluation import (
     RetrievalEvaluator,
     GenerationEvaluator,
@@ -39,10 +32,6 @@ __all__ = [
     "chunk_documents",
     "extract_citations",
     "normalize_citation",
-    "CitationManager",
-    "CitationTracker",
-    "CitationType",
-    "SourceDocument",
     "RetrievalEvaluator",
     "GenerationEvaluator",
     "RAGEvaluator",

@@ -2,9 +2,9 @@
 Tests for query classification and routing.
 """
 
-import pytest
 import sys
 import os
+import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -18,10 +18,10 @@ from utils.query_classifier import (
 )
 
 
-class TestQueryClassifier:
+class TestQueryClassifier(unittest.TestCase):
     """Test cases for QueryClassifier."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.classifier = QueryClassifier()
 
@@ -91,10 +91,10 @@ class TestQueryClassifier:
         assert result["domain"] == LegalDomain.LABOR_LAW.value
 
 
-class TestQueryRouter:
+class TestQueryRouter(unittest.TestCase):
     """Test cases for QueryRouter."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.router = QueryRouter()
 
@@ -129,10 +129,10 @@ class TestQueryRouter:
         assert result["retrieval_params"]["k"] <= 5
 
 
-class TestPromptSelector:
+class TestPromptSelector(unittest.TestCase):
     """Test cases for PromptSelector."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.selector = PromptSelector()
 
@@ -152,7 +152,7 @@ class TestPromptSelector:
         assert prompt_name == "general_prompt"
 
 
-class TestFollowUpSuggestions:
+class TestFollowUpSuggestions(unittest.TestCase):
     """Test cases for follow-up query suggestions."""
 
     def test_suggest_for_definition(self):

@@ -423,10 +423,13 @@ def suggest_follow_up_queries(query_type: QueryType, original_query: str) -> Lis
     Returns:
         List of suggested follow-up queries
     """
+    # Pre-process the query to remove common prefixes
+    query_clean = original_query.lower().replace("qu'est-ce que ", "")
+    
     suggestions = {
         QueryType.DEFINITION: [
-            f"Quelles sont les exceptions à {original_query.lower().replace('qu\'est-ce que ', '')}?",
-            f"Comment appliquer {original_query.lower().replace('qu\'est-ce que ', '')} en pratique?",
+            f"Quelles sont les exceptions à {query_clean}?",
+            f"Comment appliquer {query_clean} en pratique?",
         ],
         QueryType.PROCEDURAL: [
             "Quels sont les délais à respecter?",

@@ -11,6 +11,7 @@ from data.loader import (
 from models.embeddings import EmbeddingModel
 from data.vector_store import FAISSVectorStore
 from chains.rag_chain import RAGPipeline, create_rag_pipeline
+from utils.text_processing import chunk_documents
 import config
 
 try:
@@ -59,7 +60,19 @@ def build_index(
         print(f"Limiting to {limit} articles for faster testing")
         articles = articles[:limit]
     
-    print("\n4. Initializing embedding model...")
+    print("\n4. Chunking articles...")
+    print(f"   Chunk size: {config.CHUNK_SIZE} characters")
+    print(f"   Chunk overlap: {config.CHUNK_OVERLAP} characters")
+    chunked_articles = chunk_documents(
+        articles,
+        chunk_size=config.CHUNK_SIZE,
+        chunk_overlap=config.CHUNK_OVERLAP,
+        text_field="text",
+        metadata_fields=["code", "article"]
+    )
+    print(f"   Created {len(chunked_articles)} chunks from {len(articles)} articles")
+    
+    print("\n5. Initializing embedding model...")
     embedding_model = EmbeddingModel(device=device)
     
     print("\n5. Creating vector store...")
@@ -71,8 +84,8 @@ def build_index(
     )
     
     print("\n6. Embedding and indexing documents...")
-    texts = [article["text"] for article in articles]
-    metadatas = [article["metadata"] for article in articles]
+    texts = [chunk["text"] for chunk in chunked_articles]
+    metadatas = [chunk["metadata"] for chunk in chunked_articles]
     
     embeddings = embedding_model.embed_documents(texts)
     vector_store.add_documents(texts, embeddings, metadatas)

@@ -238,7 +238,7 @@ class LegalTextProcessor:
                         start_idx=chunk.end_idx - self.chunk_overlap,
                         end_idx=next_chunk.start_idx + self.chunk_overlap,
                         chunk_index=len(chunks),
-                        metadata={(metadata.copy() if metadata else {})}
+                        metadata=(metadata.copy() if metadata else {})
                     )
                     chunks.append(overlap_chunk)
 

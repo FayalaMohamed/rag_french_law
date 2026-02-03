@@ -26,7 +26,7 @@ class FAISSVectorStore:
         self, 
         embedding_dim: int, 
         index_path: str = None,
-        index_type: Literal["flat_l2", "ivf_flat", "ivf_pq", "hnsw_flat", "lsh"] = "flat_l2",
+        index_type: Literal["flat_l2", "ivf_flat", "ivf_pq", "hnsw_flat", "lsh"] = "hnsw_flat",
         nlist: int = 100,           # For IVF indices: number of clusters
         nprobe: int = 10,           # For IVF indices: clusters to search
         nbits: int = 8,             # For LSH: number of hash bits

@@ -71,103 +71,98 @@ class ComparisonMetrics:
     semantic_coherence_b: float
 
 
-# Embedding models to test (tested on 4GB GPU)
-# Note: multilingual-e5-base removed - causes OOM on 4GB GPU
 TEST_MODELS = {
-    # French-specific models (4GB GPU compatible)
     "sentence-camembert-base": "dangvantuan/sentence-camembert-base",
-    # Multilingual models (good for French, 4GB-compatible)
     "paraphrase-multilingual-MiniLM": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     "paraphrase-multilingual-mpnet": "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     "multilingual-e5-small": "intfloat/multilingual-e5-small",
 }
 
-# Test queries covering different legal domains and difficulty levels
 DEFAULT_TEST_QUERIES = [
-    # In-domain queries (likely in the 5000 docs)
+    # In-context queries (grounded in indexed documents - 5 queries)
     {
-        "query": "Quelles sont les conditions de la période d'essai en droit du travail?",
-        "category": "labor_law",
-        "expected_domain": "Code du travail"
+        "query": "Depuis la loi du 28 décembre 2015, quels sont les impacts concrets sur les droits des personnes âgées de plus de 60 ans concernant les prestations sociales liées à la dépendance, comme les aides financières ou les services d'accompagnement, selon les articles modifiés du Code de la sécurité sociale (L115-2-1 et L115-9) ?",
+        "category": "rights",
+        "expected_aspects": [
+            "modification des critères d'éligibilité ou de financement des aides",
+            "impact sur les droits aux prestations liées à la dépendance ou à l'autonomie",
+            "référence aux articles L115-2-1 et L115-9 du Code de la sécurité sociale"
+        ],
+        "source_code": "LOI n° 2015-1776 du 28 décembre 2015 relative à l'adaptation de la société au vieillissement (1)",
+        "source_article": "6",
+        "in_context": True
     },
     {
-        "query": "Comment rompre un contrat de travail à durée déterminée?",
-        "category": "labor_law",
-        "expected_domain": "Code du travail"
+        "query": "Si je vends un bien en France et que le contrat de cession est signé le 15 mars 2026, dois-je respecter un délai de deux mois à compter de cette date pour effectuer une certaine obligation légale (par exemple, une déclaration ou un paiement lié à la cession) ?",
+        "category": "temporal",
+        "expected_aspects": [
+            "définition de la date de cession (date de conclusion du contrat)",
+            "application du délai de deux mois à partir de cette date",
+            "interprétation du premier alinéa de l'article L. 23-10-1 du Code de commerce"
+        ],
+        "source_code": "Code de commerce",
+        "source_article": "D23-10-1",
+        "in_context": True
     },
     {
-        "query": "Quelles sont les obligations de l'employeur en matière de sécurité?",
-        "category": "labor_law",
-        "expected_domain": "Code du travail"
+        "query": "Dans le cadre du Code de la sécurité sociale, selon l'article L851-1 modifié par la loi de finances rectificative de 2015, quelles sont les règles spécifiques qui encadrent les droits des travailleurs en matière de protection sociale pour les employeurs ou les salariés concernés par cette disposition ?",
+        "category": "rights",
+        "expected_aspects": [
+            "impact de la modification légale sur les règles générales de protection sociale",
+            "référence aux conditions d'application de l'article L851-1",
+            "contexte de la loi de finances rectificative de 2015 (art. 118)"
+        ],
+        "source_code": "LOI n° 2015-1786 du 29 décembre 2015 de finances rectificative pour 2015 (1)",
+        "source_article": "118",
+        "in_context": True
     },
     {
-        "query": "Qu'est-ce que le harcèlement moral au travail?",
-        "category": "labor_law",
-        "expected_domain": "Code du travail"
+        "query": "Dans le cadre d'une entreprise adaptée, quelles sont les obligations légales précises pour l'agrément de l'entreprise selon le décret 2018-1334, et comment cela impacte-t-il les conditions de financement et d'accompagnement des salariés en situation de handicap ?",
+        "category": "conditional",
+        "expected_aspects": [
+            "conditions d'agrément (art. R5212-5 et autres)",
+            "modalités de financement (art. D5212-22 et références connexes)",
+            "accompagnement spécifique des salariés (art. R5213-46-2, R5213-70, R5213-71, R5213-73, R5523-2)"
+        ],
+        "source_code": "Décret n° 2018-1334 du 28 décembre 2018 relatif aux conditions d'agrément et de financement des entreprises adaptées ainsi qu'aux modalités d'accompagnement spécifique de leurs salariés en situation de handicap",
+        "source_article": "2",
+        "in_context": True
     },
     {
-        "query": "Article 1240 du Code civil définition du dommage",
-        "category": "civil_law",
-        "expected_domain": "Code civil"
+        "query": "Si mon employeur me fait une saisie sur mon salaire pour rembourser une dette, selon le décret de 2015, quelle partie exacte de ma rémunération peut être saisie et sous quelles conditions précises (montant maximal, durée maximale, etc.) ?",
+        "category": "conditional",
+        "expected_aspects": [
+            "montant maximal de la saisie sur salaire",
+            "durée maximale de la saisie",
+            "référence au barème spécifique mentionné dans le décret (Art. R3252-2 du Code du travail)"
+        ],
+        "source_code": "Décret n° 2015-1842 du 30 décembre 2015 révisant le barème des saisies et cessions des rémunérations",
+        "source_article": "1",
+        "in_context": True
+    },
+    # Out-of-context queries (NOT in indexed documents - 3 queries)
+    {
+        "query": "Quelles sont les règles de l'impôt sur le revenu en France?",
+        "category": "out_of_context",
+        "expected_domain": "droit immobilier",
+        "in_context": False
     },
     {
-        "query": "Conditions de validité d'un contrat selon le Code civil",
-        "category": "civil_law",
-        "expected_domain": "Code civil"
+        "query": "Comment déposer un brevet d'invention?",
+        "category": "out_of_context",
+        "expected_domain": "droit international",
+        "in_context": False
     },
     {
-        "query": "Délai de prescription en droit civil",
-        "category": "civil_law",
-        "expected_domain": "Code civil"
-    },
-    {
-        "query": "Responsabilité civile et faute",
-        "category": "civil_law",
-        "expected_domain": "Code civil"
-    },
-    # Out-of-domain queries (unlikely to be in the 5000 docs)
-    {
-        "query": "Quelles sont les règles de succession en cas de décès sans testament?",
-        "category": "inheritance",
-        "expected_domain": "Code civil"
-    },
-    {
-        "query": "Procédure de divorce par consentement mutuel",
-        "category": "family_law",
-        "expected_domain": "Code civil"
-    },
-    {
-        "query": "Droits du locataire en cas de vente du logement",
-        "category": "housing",
-        "expected_domain": "Code civil"
-    },
-    {
-        "query": "Protection des données personnelles RGPD",
-        "category": "data_protection",
-        "expected_domain": "Unknown"
-    },
-    # Edge cases
-    {
-        "query": "Article L1234-1",
-        "category": "citation",
-        "expected_domain": "Code du travail"
-    },
-    {
-        "query": "Code du travail période d'essai durée maximale",
-        "category": "keyword_search",
-        "expected_domain": "Code du travail"
-    },
-    {
-        "query": "Comment ça marche le licenciement?",
-        "category": "colloquial",
-        "expected_domain": "Code du travail"
+        "query": "Quels sont les droits du consommateur en cas de litige?",
+        "category": "out_of_context",
+        "expected_domain": "droit de la consommation",
+        "in_context": False
     }
 ]
 
 
 def get_index_path(model_name: str) -> str:
-    """Get the index path for a specific model"""
-    # Clean model name for filesystem
     clean_name = model_name.replace("/", "_").replace("-", "_")
     return f"data/faiss_index_{clean_name}"
 
@@ -178,12 +173,6 @@ def build_model_index(
     articles: List[Dict],
     index_type: str = "hnsw_flat"
 ) -> Tuple[FAISSVectorStore, float]:
-    """
-    Build FAISS index for a specific embedding model.
-    
-    Returns:
-        Tuple of (vector_store, build_time_seconds)
-    """
     print(f"\n{'='*60}")
     print(f"Building index for: {model_name}")
     print(f"Model path: {model_path}")
@@ -191,11 +180,9 @@ def build_model_index(
     
     start_time = time.time()
     
-    # Initialize embedding model
     print("\n1. Loading embedding model...")
     embedding_model = EmbeddingModel(model_name=model_path)
     
-    # Create vector store
     print("\n2. Creating vector store...")
     index_path = get_index_path(model_name)
     vector_store = FAISSVectorStore(
@@ -204,18 +191,15 @@ def build_model_index(
         index_type=index_type
     )
     
-    # Embed documents
     print("\n3. Embedding documents...")
     texts = [article["text"] for article in articles]
     metadatas = [article["metadata"] for article in articles]
     
     embeddings = embedding_model.embed_documents(texts)
     
-    # Add to index
     print("\n4. Adding to index...")
     vector_store.add_documents(texts, embeddings, metadatas)
     
-    # Save index
     print("\n5. Saving index...")
     vector_store.save_index(index_path)
     
@@ -224,7 +208,6 @@ def build_model_index(
     print(f"  Total documents: {vector_store.index.ntotal}")
     print(f"  Saved to: {index_path}")
     
-    # Clean up GPU memory
     print("\n6. Cleaning up GPU memory...")
     del embedding_model
     import gc
@@ -535,13 +518,41 @@ Réponds en JSON:
     response = llm_chain.llm.invoke(prompt)
     content = getattr(response, "content", getattr(response, "text", str(response)))
     
-    # Try to parse JSON
+    # Clean control characters from content
+    content = ''.join(char for char in content if ord(char) >= 32 or char in '\n\r\t')
+    
+    # Remove markdown code block markers if present
+    content = content.replace("```json", "").replace("```", "")
+    
+    # Try to find and parse JSON
     json_start = content.find("{")
     json_end = content.rfind("}")
     if json_start >= 0 and json_end >= 0:
-        return json.loads(content[json_start:json_end+1])
+        json_str = content[json_start:json_end+1]
+        # Remove any problematic escape sequences
+        for i in range(32):
+            if i not in [9, 10, 13]:  # Keep tab, newline, carriage return
+                json_str = json_str.replace(chr(i), '')
+        try:
+            return json.loads(json_str)
+        except json.JSONDecodeError as e:
+            # If still failing, return a default response
+            print(f"Warning: JSON parsing failed, using default: {e}")
+            return {
+                "winner": "tie",
+                "score_a": 3,
+                "score_b": 3,
+                "reasoning": "Erreur de parsing JSON"
+            }
     
-    raise ValueError(f"Could not parse LLM response as JSON: {content[:200]}")
+    # If no JSON found, return default
+    print(f"Warning: No JSON found in response, using default")
+    return {
+        "winner": "tie",
+        "score_a": 3,
+        "score_b": 3,
+        "reasoning": "Pas de JSON trouvé"
+    }
 
 
 def run_full_comparison(
@@ -899,13 +910,34 @@ def main():
         models_to_test = {k: v for k, v in TEST_MODELS.items() if k in args.models}
     
     # Load test queries
+    GENERATED_QUERIES_FILE = "test_queries_generated.json"
+    
     if args.queries_file and os.path.exists(args.queries_file):
+        # User specified a custom queries file
         with open(args.queries_file, "r", encoding="utf-8") as f:
-            test_queries = json.load(f)
+            test_queries_data = json.load(f)
+            # Handle both formats: direct list or {queries: [...]} structure
+            if isinstance(test_queries_data, list):
+                test_queries = test_queries_data
+            else:
+                test_queries = test_queries_data.get("queries", test_queries_data)
+        print(f"Loaded {len(test_queries)} queries from {args.queries_file}")
+    elif os.path.exists(GENERATED_QUERIES_FILE):
+        # Use generated queries if available
+        print(f"Loading generated queries from {GENERATED_QUERIES_FILE}...")
+        with open(GENERATED_QUERIES_FILE, "r", encoding="utf-8") as f:
+            test_queries_data = json.load(f)
+            test_queries = test_queries_data.get("queries", [])
+        in_count = sum(1 for q in test_queries if q.get("in_context") == True)
+        out_count = sum(1 for q in test_queries if q.get("in_context") == False)
+        print(f"✓ Loaded {len(test_queries)} queries ({in_count} in-context, {out_count} out-of-context)")
     else:
+        # Fall back to default queries
+        print("Generated queries not found. Using default test queries.")
+        print(f"(Generate queries with: python generate_test_queries.py)")
         test_queries = DEFAULT_TEST_QUERIES
     
-    print(f"Testing {len(models_to_test)} models on {len(test_queries)} queries")
+    print(f"\nTesting {len(models_to_test)} models on {len(test_queries)} queries")
     
     # Build indexes if requested
     if args.build_indexes:

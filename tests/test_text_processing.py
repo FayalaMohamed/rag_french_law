@@ -2,9 +2,9 @@
 Tests for text processing utilities.
 """
 
-import pytest
 import sys
 import os
+import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,10 +17,10 @@ from utils.text_processing import (
 )
 
 
-class TestLegalTextProcessor:
+class TestLegalTextProcessor(unittest.TestCase):
     """Test cases for LegalTextProcessor."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.processor = LegalTextProcessor(chunk_size=500, chunk_overlap=100)
 
@@ -96,7 +96,7 @@ class TestLegalTextProcessor:
         assert metadata["text_length"] == len(text)
 
 
-class TestChunkDocuments:
+class TestChunkDocuments(unittest.TestCase):
     """Test cases for chunk_documents function."""
 
     def test_chunk_documents_basic(self):
@@ -121,7 +121,7 @@ class TestChunkDocuments:
         assert len(chunked) == 0
 
 
-class TestCitationExtraction:
+class TestCitationExtraction(unittest.TestCase):
     """Test cases for citation extraction."""
 
     def test_extract_citations(self):

@@ -2,9 +2,9 @@
 Tests for evaluation metrics.
 """
 
-import pytest
 import sys
 import os
+import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,10 +17,10 @@ from utils.evaluation import (
 )
 
 
-class TestRetrievalEvaluator:
+class TestRetrievalEvaluator(unittest.TestCase):
     """Test cases for RetrievalEvaluator."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.evaluator = RetrievalEvaluator(k_values=[1, 3, 5])
 
@@ -100,10 +100,10 @@ class TestRetrievalEvaluator:
         assert metrics.recall_at_k >= 0
 
 
-class TestGenerationEvaluator:
+class TestGenerationEvaluator(unittest.TestCase):
     """Test cases for GenerationEvaluator."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.evaluator = GenerationEvaluator()
 
@@ -184,10 +184,10 @@ class TestGenerationEvaluator:
         assert 0 <= metrics.citation_precision <= 1.0
 
 
-class TestRAGEvaluator:
+class TestRAGEvaluator(unittest.TestCase):
     """Test cases for RAGEvaluator."""
 
-    def setup_method(self):
+    def setUp(self):
         """Set up test fixtures."""
         self.evaluator = RAGEvaluator()
 
